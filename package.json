@@ -1,0 +1,44 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "dev-front": "vite --config vite.front.config.js",
+    "build-front": "vite build --config vite.front.config.js",
+    "build-deploy": "vite build && vite build --config vite.front.config.js"
+  },
+  "dependencies": {
+    "@inertiajs/react": "^1.0.2",
+    "apexcharts": "^3.49.1",
+    "date-fns": "^3.6.0",
+    "flowbite": "^2.3.0",
+    "flowbite-react": "^0.9.0",
+    "json-as-xlsx": "^2.5.6",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-icons": "^5.2.0",
+    "react-input-mask": "^2.0.4",
+    "react-toastify": "^10.0.5",
+    "ziggy-js": "^2.1.0"
+  },
+  "devDependencies": {
+    "@mojojoejo/vite-plugin-purgecss": "^1.1.0",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
+    "@tailwindcss/forms": "^0.5.7",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "@tailwindcss/typography": "^0.5.13",
+    "@types/date-fns": "^2.6.0",
+    "@types/react": "^18.0.28",
+    "@types/react-dom": "^18.0.11",
+    "@types/react-input-mask": "^3.0.5",
+    "@types/ziggy-js": "^1.8.0",
+    "@vitejs/plugin-react": "^3.1.0",
+    "autoprefixer": "^10.4.19",
+    "axios": "^1.1.2",
+    "laravel-vite-plugin": "^0.7.4",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^4.9.5",
+    "vite": "^4.1.2"
+  }
+}
