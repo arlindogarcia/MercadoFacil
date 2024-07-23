@@ -1,24 +1,9 @@
 <?php
 
-use App\Helpers\HelperContact;
-use App\Helpers\HelperFormat;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CompaniesController;
-use App\Http\Controllers\ContractsController;
-use App\Http\Controllers\DFeController;
-use App\Http\Controllers\DFeCTeController;
-use App\Http\Controllers\DFeNFeController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\InitialController;
-use App\Http\Controllers\PaymentsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseListController;
-use App\Http\Controllers\SettingsController;
-use App\Http\Controllers\SystemController;
-use App\Http\Controllers\TermsOfUseController;
-use App\Models\Contract;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,5 +33,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::prefix('/api')->group(function () {
         Route::get('/purchase-lists', [PurchaseListController::class, 'get']);
         Route::get('/purchase-lists/{id}', [PurchaseListController::class, 'show']);
+        Route::post('/purchase-lists', [PurchaseListController::class, 'store'])->name('api.purchase.store');
     });
 });

@@ -4,7 +4,7 @@ import { Title } from "@/layouts/Layout/title";
 import React, { useEffect, useState } from "react";
 import { PurchaseList } from "./types/purchase_list";
 import axios, { AxiosResponse } from "axios";
-import { Link, usePage } from "@inertiajs/react";
+import { Link, useForm, usePage } from "@inertiajs/react";
 import { newPurchaseList } from "./data/purchase_list";
 import { TextInput } from "@/components/TextInput";
 import { InputCurrency } from "@/components/InputCurrency";
@@ -13,28 +13,44 @@ import { CheckInput } from "@/components/CheckInput";
 import "./EditStyles.css";
 import helper from "@/utils/helper";
 import { newPurchaseListItem } from "./data/purchase_list_item";
+import { route } from "ziggy-js";
 
 export default () => {
   const props = usePage().props;
 
   const id = props.id as string;
 
-  const [form, setForm] = useState<PurchaseList | null>(null);
+  const [isLoadingForm, setIsLoadingForm] = useState(false);
+  const {
+    data: form,
+    setData: setForm,
+    processing,
+    errors,
+    post,
+  } = useForm<PurchaseList>(newPurchaseList());
 
   const getPurchaseList = async () => {
+    setIsLoadingForm(true);
     const resp: AxiosResponse<PurchaseList> = await axios.get(`/api/purchase-lists/${id}`);
 
     setForm(resp.data);
+    setIsLoadingForm(false);
+  };
+
+  const handleSubmit = async () => {
+    return post(route("api.purchase.store"), {
+      preserveScroll: true,
+      preserveState: true,
+    });
   };
 
   useEffect(() => {
-    if (id === "new") {
-      return setForm(newPurchaseList());
+    if (id != "new") {
+      getPurchaseList();
     }
-    getPurchaseList();
   }, []);
 
-  if (form === null) {
+  if (isLoadingForm) {
     return (
       <Layout
         header={
@@ -109,6 +125,7 @@ export default () => {
           value={form.marketplace}
           onChange={(event) => setForm({ ...form, marketplace: event.target.value })}
           externalClass="w-full"
+          error={errors.marketplace}
         />
         <InputCurrency
           label="Orçamento"
@@ -219,18 +236,22 @@ export default () => {
                 <span className="font-bold text-gray-700">MARCADO</span>
                 <br />
                 <span className="font-semibold text-gray-500">
-                  {helper.formatMoney(form.budget)}
+                  {helper.formatMoney(form.marked)}
                 </span>
               </div>
               <div className="w-1/3 text-center">
                 <span className="font-bold text-gray-700">SALDO</span>
                 <br />
                 <span className="font-semibold text-gray-500">
-                  {helper.formatMoney(form.budget)}
+                  {helper.formatMoney(form.balance)}
                 </span>
               </div>
             </div>
-            <DefaultButton externalClass="w-full flex gap-1 justify-center items-center">
+            <DefaultButton
+              processing={processing}
+              onClick={handleSubmit}
+              externalClass="w-full flex gap-1 justify-center items-center"
+            >
               <FiSave /> Salvar
             </DefaultButton>
           </div>

@@ -7,6 +7,8 @@ export const newPurchaseList = (): PurchaseList => {
     marketplace: "",
     budget: 0,
     user_id: "",
+    marked: 0,
+    balance: 0,
     items: [{ ...newPurchaseListItem() }],
   };
 };

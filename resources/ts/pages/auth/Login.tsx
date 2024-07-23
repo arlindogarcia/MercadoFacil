@@ -54,14 +54,6 @@ function Login({ status }: Props) {
               <div className="mb-4">
                 <TextInput id="password" type="password" label="Senha" value={form.password} onChange={handleChange} error={errors.password} />
               </div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
-                  <CheckInput label="Permanecer conectado" onChangeVal={console.log} />
-                </div>
-                <Link href="/forgot-password" className="text-green-500 hover:text-green-700 font-bold text-sm">
-                  Esqueci a senha
-                </Link>
-              </div>
               <DefaultButton processing={processing}>Entrar</DefaultButton>
             </form>
             <p className="mt-6 text-center text-gray-500 text-sm">

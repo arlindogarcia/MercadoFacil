@@ -5,5 +5,7 @@ export interface PurchaseList extends Model {
   marketplace: string;
   budget: number;
   user_id: string | number;
+  marked: number;
+  balance: number;
   items: PurchaseListItem[];
 }
