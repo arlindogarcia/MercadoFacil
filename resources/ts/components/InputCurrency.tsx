@@ -31,8 +31,8 @@ export const InputCurrency: React.FC<InputCurrencyProps> = ({
 
   return (
     <div className={externalClass}>
-      <label className="block text-gray-700 text-sm font-semibold mb-1">{label}</label>
-      <div className="mt-2">
+      <label className="block text-gray-700 text-sm font-semibold mt-1">{label}</label>
+      <div className="mt-1">
         <input
           className={`
       block

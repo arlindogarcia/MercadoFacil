@@ -26,7 +26,7 @@ function Layout({ children, header, headerClass, hasPadding = true }: Props) {
           </div>
         </header>}
         <Banner />
-          <div className={`w-full px-2 ${hasPadding ? 'sm:px-8 py-8' : ''}`}>
+          <div className={`w-full px-2 ${hasPadding ? 'sm:px-8 py-4' : ''}`}>
             {children}
           </div>
         </main>

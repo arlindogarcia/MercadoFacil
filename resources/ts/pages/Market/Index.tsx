@@ -1,7 +1,6 @@
 import Layout from "@/layouts/Layout";
 import { DefaultButton } from "@/components/DefaultButton";
 import { Title } from "@/layouts/Layout/title";
-import { Section } from "@/components/Section";
 import React, { useEffect, useState } from "react";
 import { PurchaseList } from "./types/purchase_list";
 import axios, { AxiosResponse } from "axios";
@@ -41,7 +40,9 @@ export default () => {
         <React.Fragment>
           <Title>Listas de Compra</Title>
           <Link href="/purchase-lists/new">
-            <DefaultButton externalClass="w-auto">Adicionar</DefaultButton>
+            <DefaultButton externalClass="w-auto flex gap-1 justify-center items-center">
+                <FiPlus /> Adicionar
+            </DefaultButton>
           </Link>
         </React.Fragment>
       }

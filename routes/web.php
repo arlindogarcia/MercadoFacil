@@ -47,5 +47,6 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::prefix('/api')->group(function () {
         Route::get('/purchase-lists', [PurchaseListController::class, 'get']);
+        Route::get('/purchase-lists/{id}', [PurchaseListController::class, 'show']);
     });
 });

@@ -1,0 +1,53 @@
+.editable-input:empty:after {
+    content: attr(data-placeholder);
+    color: grey;
+}
+
+.editable-input {
+    min-width: 16px;
+    font-size: 0.9rem;
+}
+
+.editable-input:focus-visible {
+    outline: none;
+}
+
+.list-table table tr td div.inline-block {
+    width: 100%;
+    display: block;
+}
+
+.list-table table tbody:first-of-type tr td:focus-within {
+    background-color: #ffffff;
+    outline: 1px solid #455879;
+    border-radius: 1px;
+    background-color: #ffffff;
+    outline: 1px solid #c6c7cc;
+    border-radius: 1px;
+    box-shadow: 3px 2px 4px 1px #8e858575;
+    z-index: 2;
+    min-width: 150px;
+}
+
+.list-table table tbody:first-of-type tr td:last-child:focus-within {
+    min-width: 0px;
+    box-shadow: none;
+    background-color: #f5f5f5;
+    outline: none;
+}
+
+.list-table table tbody:first-of-type tr td {
+    background-color: #f5f5f5;
+}
+
+.list-table table tbody:first-of-type {
+    border-bottom: 2px solid #d2d5dd;
+}
+
+.list-table:focus-within tbody tr {
+    opacity: 0.3;
+}
+
+.list-table:focus-within tr:focus-within {
+    opacity: 1;
+}

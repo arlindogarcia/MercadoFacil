@@ -4,7 +4,7 @@ type DefaultButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   processing?: boolean;
   externalClass?: string;
   size?: 'md' | 'sm' | 'xs';
-  color?: 'default' | 'gray' | 'red' | 'white' | 'green' | 'gray-light';
+  color?: 'default' | 'gray' | 'red' | 'white' | 'green' | 'gray-light' | 'blue';
 };
 
 export const DefaultButton = ({ children, processing, externalClass = 'w-full', size = "md", color = "default", ...field }: DefaultButtonProps) => {
@@ -21,6 +21,7 @@ export const DefaultButton = ({ children, processing, externalClass = 'w-full', 
     'red': 'text-white bg-red-500 hover:bg-red-700 focus:ring-red-500',
     'white': 'bg-white hover:bg-gray-50 focus:ring-gray-200 border border-gray-300 text-gray-700',
     'green': 'text-white bg-green-600 hover:bg-green-700 focus:ring-green-600',
+    'blue': 'text-white bg-blue-600 hover:bg-blue-700 focus:ring-blue-600',
   }
 
   return (
