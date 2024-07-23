@@ -13,7 +13,7 @@ export default () => {
   const [purchaseLists, setPurchaseLists] = useState<PurchaseList[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const addPurchaseLists = (purchaseLists: PurchaseList[]) => {
     setPurchaseLists((oldValue) => {

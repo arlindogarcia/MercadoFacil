@@ -8,7 +8,7 @@ import { Link, useForm, usePage } from "@inertiajs/react";
 import { newPurchaseList } from "./data/purchase_list";
 import { TextInput } from "@/components/TextInput";
 import { InputCurrency } from "@/components/InputCurrency";
-import { FiArrowLeft, FiPlus, FiSave } from "react-icons/fi";
+import { FiArrowLeft, FiPlus, FiSave, FiTrash } from "react-icons/fi";
 import { CheckInput } from "@/components/CheckInput";
 import "./EditStyles.css";
 import helper from "@/utils/helper";
@@ -20,7 +20,7 @@ export default () => {
 
   const id = props.id as string;
 
-  const [isLoadingForm, setIsLoadingForm] = useState(false);
+  const [isLoadingForm, setIsLoadingForm] = useState(true);
   const {
     data: form,
     setData: setForm,
@@ -47,6 +47,7 @@ export default () => {
   useEffect(() => {
     if (id != "new") {
       getPurchaseList();
+      setIsLoadingForm(false);
     }
   }, []);
 
@@ -56,11 +57,24 @@ export default () => {
         header={
           <React.Fragment>
             <Title>Lista de Compra</Title>
-            <Link href="/purchase-lists">
-              <DefaultButton externalClass="w-auto" color="gray">
-                Voltar
+
+            <div className="flex gap-1">
+              <DefaultButton
+                externalClass="w-auto flex gap-1 justify-center items-center"
+                color="red"
+              >
+                <FiTrash /> Excluir
               </DefaultButton>
-            </Link>
+
+              <Link href="/purchase-lists">
+                <DefaultButton
+                  externalClass="w-auto flex gap-1 justify-center items-center"
+                  color="gray"
+                >
+                  <FiArrowLeft /> Voltar
+                </DefaultButton>
+              </Link>
+            </div>
           </React.Fragment>
         }
       >
@@ -108,14 +122,24 @@ export default () => {
       header={
         <React.Fragment>
           <Title>Lista de Compra</Title>
-          <Link href="/purchase-lists">
+
+          <div className="flex gap-1">
             <DefaultButton
               externalClass="w-auto flex gap-1 justify-center items-center"
-              color="gray"
+              color="red"
             >
-              <FiArrowLeft /> Voltar
+              <FiTrash /> Excluir
             </DefaultButton>
-          </Link>
+
+            <Link href="/purchase-lists">
+              <DefaultButton
+                externalClass="w-auto flex gap-1 justify-center items-center"
+                color="gray"
+              >
+                <FiArrowLeft /> Voltar
+              </DefaultButton>
+            </Link>
+          </div>
         </React.Fragment>
       }
     >
