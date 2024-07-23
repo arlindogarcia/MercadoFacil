@@ -20,7 +20,7 @@ export default () => {
 
   const id = props.id as string;
 
-  const [isLoadingForm, setIsLoadingForm] = useState(true);
+  const [isLoadingForm, setIsLoadingForm] = useState(id != "new");
   const {
     data: form,
     setData: setForm,
@@ -47,8 +47,9 @@ export default () => {
   useEffect(() => {
     if (id != "new") {
       getPurchaseList();
-      setIsLoadingForm(false);
+      return;
     }
+    setIsLoadingForm(false);
   }, []);
 
   if (isLoadingForm) {
