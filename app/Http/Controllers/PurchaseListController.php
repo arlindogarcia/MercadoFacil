@@ -18,8 +18,8 @@ class PurchaseListController extends Controller
         return Inertia::render('Market/Index');
     }
 
-    public function get()
+    public function get(Request $request)
     {
-
+        return PurchaseList::with(['items'])->where('user_id', auth()->user()->id)->orderBy('created_at', 'desc')->paginate(1);
     }
 }
