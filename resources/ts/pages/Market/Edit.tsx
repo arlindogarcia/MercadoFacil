@@ -231,7 +231,8 @@ export default () => {
                           : parseInt((event.target as any).innerText),
                         index
                       );
-                      setCursorPositionToEnd(event.target as any);
+                      
+                      setTimeout(() => setCursorPositionToEnd(event.target as any));
                     }}
                   >
                     {form.items[index].quantity}
@@ -245,7 +246,7 @@ export default () => {
                     className="editable-input pl-2"
                     onInput={(event) => {
                       onUpdateItem("product", (event.target as any).innerText, index);
-                      setCursorPositionToEnd(event.target as any);
+                      setTimeout(() => setCursorPositionToEnd(event.target as any));
                     }}
                   >
                     {form.items[index].product}

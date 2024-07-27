@@ -17,7 +17,7 @@
                 transform: scale(1);
             }
         </style>
-        <script>
+        {{-- <script>
             document.querySelectorAll('input[type="text"]').forEach(input => {
                 input.addEventListener('focus', () => {
                     document.body.style.zoom = "1";
@@ -27,7 +27,7 @@
                     document.body.style.zoom = "1";
                 });
             });
-        <script>
+        <script> --}}
         <!-- Scripts -->
         @routes
         @viteReactRefresh
