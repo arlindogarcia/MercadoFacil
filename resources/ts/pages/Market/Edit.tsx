@@ -43,7 +43,7 @@ export default () => {
   const handleSubmit = async () => {
     return post(route("api.purchase.store"), {
       preserveScroll: true,
-      preserveState: false,
+      preserveState: true,
     });
   };
 
