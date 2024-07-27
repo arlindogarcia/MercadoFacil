@@ -12,7 +12,7 @@ export const InputDiv = ({
   value,
   onInput,
   inputMode = "text",
-  externalClassName,
+  externalClassName = "pl-2",
 }: InputDivProps) => {
   const inputRef = useRef(null);
 
@@ -49,7 +49,7 @@ export const InputDiv = ({
       contentEditable={true}
       suppressContentEditableWarning={true}
       onKeyDown={(event) => handleKeyPress(event)}
-      className={`${externalClassName} editable-input pl-2`}
+      className={`${externalClassName} editable-input`}
       onInput={onInput}
       onFocus={(event) => setCursorPositionToEnd(event.target)}
     >
