@@ -17,6 +17,7 @@ import { route } from "ziggy-js";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 import { SecondaryButton } from "@/components/SecondaryButton";
 import { DangerButton } from "@/components/DangerButton";
+import { InputDiv } from "./components/InputDiv";
 
 export default () => {
   const props = usePage().props;
@@ -55,7 +56,6 @@ export default () => {
     setIsLoadingForm(false);
   }, [id]);
 
-  
   const getSumOfMarkedItems = () => {
     return form.items.reduce((acumullator, currentValue) => {
       if (currentValue.checked == 0) {
@@ -126,7 +126,11 @@ export default () => {
   };
 
   const handleKeyPress = (event: any, onlyNumbers = true) => {
-    if (onlyNumbers && isNaN((String as any).fromCharCode(event.which)) && event.key != 'Backspace') {
+    if (
+      onlyNumbers &&
+      isNaN((String as any).fromCharCode(event.which)) &&
+      event.key != "Backspace"
+    ) {
       event.preventDefault();
     }
   };
@@ -148,7 +152,6 @@ export default () => {
     onUpdateItem(field, parseFloat(val), index);
     setCursorPositionToEnd(e.target);
   };
-
 
   return (
     <Layout
@@ -231,7 +234,7 @@ export default () => {
                           : parseInt((event.target as any).innerText),
                         index
                       );
-                      
+
                       setTimeout(() => setCursorPositionToEnd(event.target as any));
                     }}
                   >
@@ -239,18 +242,12 @@ export default () => {
                   </div>
                 </td>
                 <td className="w-[62%] border">
-                  <div
-                    contentEditable={true}
-                    suppressContentEditableWarning={true}
-                    onKeyDown={(event) => handleKeyPress(event, false)}
-                    className="editable-input pl-2"
-                    onInput={(event) => {
-                      onUpdateItem("product", (event.target as any).innerText, index);
-                      setTimeout(() => setCursorPositionToEnd(event.target as any));
-                    }}
-                  >
-                    {form.items[index].product}
-                  </div>
+                  <InputDiv
+                    value={form.items[index].product}
+                    onInput={(event) =>
+                      onUpdateItem("product", (event.target as any).innerText, index)
+                    }
+                  />
                 </td>
                 <td className="w-[18%] border text-left">
                   <div
@@ -284,25 +281,25 @@ export default () => {
         </DefaultButton>
       </div>
       <ConfirmationModal
-          show={confirmationDeleteList}
-          close={() => setConfirmationDeleteList(false)}
-          title={"Remover lista de compra"}
-          content={"Você tem certeza que deseja remover esta lista de compra?"}
-          footer={
-            <>
-              <SecondaryButton
-                externalClass="w-auto"
-                onClick={() => setConfirmationDeleteList(false)}
-              >
-                Cancelar
-              </SecondaryButton>
+        show={confirmationDeleteList}
+        close={() => setConfirmationDeleteList(false)}
+        title={"Remover lista de compra"}
+        content={"Você tem certeza que deseja remover esta lista de compra?"}
+        footer={
+          <>
+            <SecondaryButton
+              externalClass="w-auto"
+              onClick={() => setConfirmationDeleteList(false)}
+            >
+              Cancelar
+            </SecondaryButton>
 
-              <DangerButton processing={deleting} externalClass="ms-3" onClick={deleteItem}>
-                Remover
-              </DangerButton>
-            </>
-          }
-        />
+            <DangerButton processing={deleting} externalClass="ms-3" onClick={deleteItem}>
+              Remover
+            </DangerButton>
+          </>
+        }
+      />
       <div className="w-full flex bg-white shadow-[15px_10px_10px_5px] w-full p-2 justify-center fixed bottom-0 left-0">
         <div className="sm:ml-[17.5rem] min-w-[100vw] sm:min-w-[500px] px-3">
           <div className="w-full">
