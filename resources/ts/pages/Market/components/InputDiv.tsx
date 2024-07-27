@@ -9,7 +9,7 @@ type InputDivProps = React.DOMAttributes<HTMLDivElement> & {
 export const InputDiv = ({ onlyNumbers = false, value, onInput, inputMode = "text" }: InputDivProps) => {
   const inputRef = useRef(null);
 
-  const handleKeyPress = (event: any, onlyNumbers = true) => {
+  const handleKeyPress = (event: any) => {
     if (
       onlyNumbers &&
       isNaN((String as any).fromCharCode(event.which)) &&
@@ -41,7 +41,7 @@ export const InputDiv = ({ onlyNumbers = false, value, onInput, inputMode = "tex
       inputMode={inputMode}
       contentEditable={true}
       suppressContentEditableWarning={true}
-      onKeyDown={(event) => handleKeyPress(event, false)}
+      onKeyDown={(event) => handleKeyPress(event)}
       className="editable-input pl-2"
       onInput={onInput}
       onFocus={(event) => setCursorPositionToEnd(event.target)}

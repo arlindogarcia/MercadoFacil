@@ -220,26 +220,20 @@ export default () => {
                   />
                 </td>
                 <td className="max-w-[5%] border">
-                  <div
-                    contentEditable={true}
-                    inputMode="decimal"
-                    suppressContentEditableWarning={true}
-                    onKeyDown={(event) => handleKeyPress(event, true)}
-                    className="editable-input text-center"
-                    onInput={(event) => {
+                  <InputDiv
+                    onlyNumbers={true}
+                    value={form.items[index].quantity}
+                    onInput={(event) =>
                       onUpdateItem(
                         "quantity",
                         isNaN(parseInt((event.target as any).innerText))
                           ? ""
                           : parseInt((event.target as any).innerText),
                         index
-                      );
-
-                      setTimeout(() => setCursorPositionToEnd(event.target as any));
-                    }}
-                  >
-                    {form.items[index].quantity}
-                  </div>
+                      )
+                    }
+                    inputMode="decimal"
+                  />
                 </td>
                 <td className="w-[62%] border">
                   <InputDiv
