@@ -3,9 +3,10 @@ import { useEffect, useRef } from "react";
 type InputDivProps = React.DOMAttributes<HTMLDivElement> & {
   onlyNumbers?: boolean;
   value: any;
+  inputMode?: 'text' | 'decimal';
 };
 
-export const InputDiv = ({ onlyNumbers = false, value, onInput }: InputDivProps) => {
+export const InputDiv = ({ onlyNumbers = false, value, onInput, inputMode = "text" }: InputDivProps) => {
   const inputRef = useRef(null);
 
   const handleKeyPress = (event: any, onlyNumbers = true) => {
@@ -37,11 +38,13 @@ export const InputDiv = ({ onlyNumbers = false, value, onInput }: InputDivProps)
   return (
     <div
       ref={inputRef}
+      inputMode={inputMode}
       contentEditable={true}
       suppressContentEditableWarning={true}
       onKeyDown={(event) => handleKeyPress(event, false)}
       className="editable-input pl-2"
       onInput={onInput}
+      onFocus={(event) => setCursorPositionToEnd(event.target)}
     >
       {value}
     </div>

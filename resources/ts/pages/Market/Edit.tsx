@@ -250,16 +250,11 @@ export default () => {
                   />
                 </td>
                 <td className="w-[18%] border text-left">
-                  <div
-                    contentEditable={true}
-                    inputMode="decimal"
-                    suppressContentEditableWarning={true}
-                    onKeyDown={(event) => handleKeyPress(event, false)}
-                    className="editable-input pl-2"
+                  <InputDiv
+                    value={helper.formatNumber(form.items[index].unitary_value, 2)}
                     onInput={(event) => handleNumberChange(event, "unitary_value", index)}
-                  >
-                    {helper.formatNumber(form.items[index].unitary_value, 2)}
-                  </div>
+                    inputMode="decimal"
+                  />
                 </td>
               </tr>
             ))}
