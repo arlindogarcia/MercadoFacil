@@ -219,8 +219,9 @@ export default () => {
                 <td className="max-w-[5%] border">
                   <div
                     contentEditable={true}
+                    inputMode="decimal"
                     suppressContentEditableWarning={true}
-                    onKeyPress={(event) => handleKeyPress(event, true)}
+                    onKeyDown={(event) => handleKeyPress(event, true)}
                     className="editable-input text-center"
                     onInput={(event) => {
                       onUpdateItem(
@@ -240,7 +241,7 @@ export default () => {
                   <div
                     contentEditable={true}
                     suppressContentEditableWarning={true}
-                    onKeyPress={(event) => handleKeyPress(event, false)}
+                    onKeyDown={(event) => handleKeyPress(event, false)}
                     className="editable-input pl-2"
                     onInput={(event) => {
                       onUpdateItem("product", (event.target as any).innerText, index);
@@ -253,8 +254,9 @@ export default () => {
                 <td className="w-[18%] border text-left">
                   <div
                     contentEditable={true}
+                    inputMode="decimal"
                     suppressContentEditableWarning={true}
-                    onKeyPress={(event) => handleKeyPress(event, false)}
+                    onKeyDown={(event) => handleKeyPress(event, false)}
                     className="editable-input pl-2"
                     onInput={(event) => handleNumberChange(event, "unitary_value", index)}
                   >
