@@ -75,6 +75,7 @@ class PurchaseListController extends Controller
             }
             return back()->with('flash', [
                 'list' => $list,
+                'banner' => "Lista salva com sucesso.",
             ]);
         } catch (Exception $e) {
             DB::rollBack();
