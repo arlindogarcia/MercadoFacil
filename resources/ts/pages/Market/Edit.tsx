@@ -233,6 +233,7 @@ export default () => {
                       )
                     }
                     inputMode="decimal"
+                    externalClassName="text-center"
                   />
                 </td>
                 <td className="w-[62%] border">

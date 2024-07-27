@@ -3,10 +3,17 @@ import { useEffect, useRef } from "react";
 type InputDivProps = React.DOMAttributes<HTMLDivElement> & {
   onlyNumbers?: boolean;
   value: any;
-  inputMode?: 'text' | 'decimal';
+  inputMode?: "text" | "decimal";
+  externalClassName?: string;
 };
 
-export const InputDiv = ({ onlyNumbers = false, value, onInput, inputMode = "text" }: InputDivProps) => {
+export const InputDiv = ({
+  onlyNumbers = false,
+  value,
+  onInput,
+  inputMode = "text",
+  externalClassName,
+}: InputDivProps) => {
   const inputRef = useRef(null);
 
   const handleKeyPress = (event: any) => {
@@ -42,7 +49,7 @@ export const InputDiv = ({ onlyNumbers = false, value, onInput, inputMode = "tex
       contentEditable={true}
       suppressContentEditableWarning={true}
       onKeyDown={(event) => handleKeyPress(event)}
-      className="editable-input pl-2"
+      className={`${externalClassName} editable-input pl-2`}
       onInput={onInput}
       onFocus={(event) => setCursorPositionToEnd(event.target)}
     >
