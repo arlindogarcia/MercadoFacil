@@ -18,8 +18,7 @@ export const CheckInput = ({ label, error, children, onChangeVal, ...field }: Ch
           ref={inputRef}
           onChange={(event) => {
             onChangeVal(event.target.checked ? 1 : 0 as any);
-          }}    
-          
+          }}
           {...field}
         />
       </div>

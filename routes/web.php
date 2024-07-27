@@ -34,5 +34,6 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/purchase-lists', [PurchaseListController::class, 'get']);
         Route::get('/purchase-lists/{id}', [PurchaseListController::class, 'show']);
         Route::post('/purchase-lists', [PurchaseListController::class, 'store'])->name('api.purchase.store');
+        Route::delete('/purchase-lists/{id}', [PurchaseListController::class, 'destroy'])->name('api.purchase.destroy');
     });
 });

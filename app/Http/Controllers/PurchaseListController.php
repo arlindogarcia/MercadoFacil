@@ -80,4 +80,33 @@ class PurchaseListController extends Controller
             ]);
         }
     }
+
+    public function destroy($id)
+    {
+        try {
+            $list = PurchaseList::findOrFail($id);
+
+            if ($list->user_id != auth()->user()->id) {
+                return back()->with('flash', [
+                    'banner' => "Sem permissão.",
+                    'bannerStyle' => 'danger',
+                ]);
+            }
+            foreach ($list->items as $item) {
+                $item->delete();
+            }
+            
+            PurchaseList::where('id', $id)->delete();
+
+            return redirect('/purchase-lists')->with('flash', [
+                'banner' => "Lista deletada com sucesso.",
+            ]);
+
+        } catch (Exception $e) {
+            return back()->with('flash', [
+                'banner' => "Erro: " . $e->getMessage(),
+                'bannerStyle' => 'danger',
+            ]);
+        }
+    }
 }

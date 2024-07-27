@@ -14,6 +14,9 @@ import "./EditStyles.css";
 import helper from "@/utils/helper";
 import { newPurchaseListItem } from "./data/purchase_list_item";
 import { route } from "ziggy-js";
+import { ConfirmationModal } from "@/components/ConfirmationModal";
+import { SecondaryButton } from "@/components/SecondaryButton";
+import { DangerButton } from "@/components/DangerButton";
 
 export default () => {
   const props = usePage().props;
@@ -51,6 +54,33 @@ export default () => {
     }
     setIsLoadingForm(false);
   }, []);
+
+  
+  const getSumOfMarkedItems = () => {
+    return form.items.reduce((acumullator, currentValue) => {
+      if (currentValue.checked == 0) {
+        return acumullator;
+      }
+
+      return acumullator + (currentValue.quantity ?? 0) * (currentValue.unitary_value ?? 0);
+    }, 0);
+  };
+
+  const getBalance = () => {
+    return form.budget - getSumOfMarkedItems();
+  };
+
+  const [confirmationDeleteList, setConfirmationDeleteList] = useState(false);
+
+  const deleteItemForm = useForm({});
+  const [deleting, setDeleting] = useState(false);
+  const deleteItem = () => {
+    setDeleting(true);
+    deleteItemForm.delete(route("api.purchase.destroy", { id: id }), {
+      preserveScroll: true,
+      preserveState: true,
+    });
+  };
 
   if (isLoadingForm) {
     return (
@@ -118,6 +148,8 @@ export default () => {
     onUpdateItem(field, parseFloat(val), index);
     setCursorPositionToEnd(e.target);
   };
+
+
   return (
     <Layout
       header={
@@ -125,12 +157,15 @@ export default () => {
           <Title>Lista de Compra</Title>
 
           <div className="flex gap-1">
-            <DefaultButton
-              externalClass="w-auto flex gap-1 justify-center items-center"
-              color="red"
-            >
-              <FiTrash /> Excluir
-            </DefaultButton>
+            {id != "new" && (
+              <DefaultButton
+                externalClass="w-auto flex gap-1 justify-center items-center"
+                color="red"
+                onClick={() => setConfirmationDeleteList(true)}
+              >
+                <FiTrash /> Excluir
+              </DefaultButton>
+            )}
 
             <Link href="/purchase-lists">
               <DefaultButton
@@ -177,7 +212,7 @@ export default () => {
                 <td className="p-1 w-[5%] border">
                   <CheckInput
                     label=""
-                    value={form.items[index].checked}
+                    checked={form.items[index].checked == 1}
                     onChangeVal={(value) => onUpdateItem("checked", value, index)}
                   />
                 </td>
@@ -245,7 +280,26 @@ export default () => {
           <FiPlus /> Incluir
         </DefaultButton>
       </div>
+      <ConfirmationModal
+          show={confirmationDeleteList}
+          close={() => setConfirmationDeleteList(false)}
+          title={"Remover lista de compra"}
+          content={"Você tem certeza que deseja remover esta lista de compra?"}
+          footer={
+            <>
+              <SecondaryButton
+                externalClass="w-auto"
+                onClick={() => setConfirmationDeleteList(false)}
+              >
+                Cancelar
+              </SecondaryButton>
 
+              <DangerButton processing={deleting} externalClass="ms-3" onClick={deleteItem}>
+                Remover
+              </DangerButton>
+            </>
+          }
+        />
       <div className="w-full flex bg-white shadow-[15px_10px_10px_5px] w-full p-2 justify-center fixed bottom-0 left-0">
         <div className="sm:ml-[17.5rem] min-w-[100vw] sm:min-w-[500px] px-3">
           <div className="w-full">
@@ -261,14 +315,14 @@ export default () => {
                 <span className="font-bold text-gray-700">MARCADO</span>
                 <br />
                 <span className="font-semibold text-gray-500">
-                  {helper.formatMoney(form.marked)}
+                  {helper.formatMoney(getSumOfMarkedItems())}
                 </span>
               </div>
               <div className="w-1/3 text-center">
                 <span className="font-bold text-gray-700">SALDO</span>
                 <br />
                 <span className="font-semibold text-gray-500">
-                  {helper.formatMoney(form.balance)}
+                  {helper.formatMoney(getBalance())}
                 </span>
               </div>
             </div>
