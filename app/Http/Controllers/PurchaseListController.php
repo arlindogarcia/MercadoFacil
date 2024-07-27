@@ -67,6 +67,12 @@ class PurchaseListController extends Controller
             }
 
             DB::commit();
+
+            if (! $request->id) {
+                return redirect('/purchase-lists/' . $list->id)->with('flash', [
+                    'banner' => "Lista salva com sucesso.",
+                ]);
+            }
             return back()->with('flash', [
                 'list' => $list,
             ]);
