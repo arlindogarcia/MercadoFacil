@@ -126,7 +126,7 @@ export default () => {
   };
 
   const handleKeyPress = (event: any, onlyNumbers = true) => {
-    if (onlyNumbers && isNaN((String as any).fromCharCode(event.which))) {
+    if (onlyNumbers && isNaN((String as any).fromCharCode(event.which)) && event.key != 'Backspace') {
       event.preventDefault();
     }
   };
