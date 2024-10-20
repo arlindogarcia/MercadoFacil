@@ -209,7 +209,7 @@ export default () => {
           <tbody>
             {form.items.map((item, index) => (
               <tr
-                key={`${index}`}
+                key={`${index}${item.purchase_list_id}${item.id}`}
                 className={`py-0 border ${index % 2 == 0 ? "bg-white" : "bg-gray-100"}`}
               >
                 <td className="p-1 w-[5%] border">
