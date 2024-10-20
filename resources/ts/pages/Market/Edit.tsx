@@ -45,6 +45,11 @@ export default () => {
     return post(route("api.purchase.store"), {
       preserveScroll: true,
       preserveState: true,
+      onSuccess: (data: any) => {
+        if (data.props?.flash?.list) {
+            setForm(data.props?.flash?.list);
+        }
+      }
     });
   };
 
