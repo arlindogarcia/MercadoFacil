@@ -367,17 +367,21 @@ export default () => {
                 >
                   <td className="w-[5%] border text-center">
                     <div
-                      className="cursor-grab active:cursor-grabbing hover:bg-gray-200 rounded inline-block transition-colors select-none"
+                      className="cursor-grab active:cursor-grabbing hover:bg-gray-200 rounded inline-block transition-colors select-none touch-none"
+                      style={{ touchAction: 'none' }}
                       title="Arrastar para deletar"
                       onMouseDown={(e) => {
+                        e.preventDefault();
                         const startX = e.clientX;
                         handleSwipeStart(originalIndex, startX);
                         
                         const handleMouseMove = (e: MouseEvent) => {
+                          e.preventDefault();
                           handleSwipeMove(originalIndex, e.clientX, startX);
                         };
 
-                        const handleMouseUp = () => {
+                        const handleMouseUp = (e: MouseEvent) => {
+                          e.preventDefault();
                           handleSwipeEnd(originalIndex);
                           document.removeEventListener('mousemove', handleMouseMove);
                           document.removeEventListener('mouseup', handleMouseUp);
@@ -387,17 +391,22 @@ export default () => {
                         document.addEventListener('mouseup', handleMouseUp);
                       }}
                       onTouchStart={(e) => {
+                        e.preventDefault();
                         const startX = e.touches[0].clientX;
                         handleSwipeStart(originalIndex, startX);
                         // Salvar startX no elemento para usar no touchMove
                         (e.currentTarget as any).swipeStartX = startX;
                       }}
                       onTouchMove={(e) => {
+                        e.preventDefault();
                         const touch = e.touches[0];
                         const startX = (e.currentTarget as any).swipeStartX || touch.clientX;
                         handleSwipeMove(originalIndex, touch.clientX, startX);
                       }}
-                      onTouchEnd={() => handleSwipeEnd(originalIndex)}
+                      onTouchEnd={(e) => {
+                        e.preventDefault();
+                        handleSwipeEnd(originalIndex);
+                      }}
                     >
                       <FiMenu size={14} className="text-gray-400" />
                     </div>
