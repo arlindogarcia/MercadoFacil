@@ -222,11 +222,11 @@ export default () => {
     const currentState = swipeStates[index];
     if (!currentState?.isDragging) return;
     
-    const offset = clientX - startX;
+    const offset = startX - clientX;
     if (offset > 0) {
       const newOffset = Math.min(offset, 120);
       updateSwipeState(index, { 
-        offset: newOffset,
+        offset: -newOffset,
         showDelete: newOffset > 60
       });
     }
@@ -239,7 +239,7 @@ export default () => {
     updateSwipeState(index, { isDragging: false });
     setIsDraggingAny(false);
     
-    if (currentState.offset < 60) {
+    if (Math.abs(currentState.offset) < 60) {
       updateSwipeState(index, { offset: 0, showDelete: false });
     }
   };
@@ -307,7 +307,6 @@ export default () => {
 
         <div className="w-full mt-4 overflow-hidden relative">
         
-        {/* Botões de ação que aparecem no swipe */}
         {Object.entries(swipeStates).map(([index, state]) => {
           if (!state.showDelete) return null;
           const itemIndex = parseInt(index);
@@ -322,27 +321,29 @@ export default () => {
           return (
             <div 
               key={`delete-buttons-${itemIndex}`}
-              className="absolute right-0 flex items-center gap-2 bg-red-500 px-3 z-20"
+              className="absolute left-0 flex items-center gap-2 bg-red-500 px-0.5 z-20"
               style={{ 
                 width: '100%', 
                 height: `${rowHeight}px`,
                 top: `${topPosition}px`
               }}
             >
-              <button
-                type="button"
-                onClick={() => confirmDeleteItem(itemIndex)}
-                className="bg-white text-red-500 px-2 py-1 rounded text-xs font-semibold hover:bg-red-50 flex items-center gap-1"
-              >
-                <FiTrash size={10} /> Deletar
-              </button>
-              <button
-                type="button"
-                onClick={() => cancelDeleteItem(itemIndex)}
-                className="bg-red-600 text-white px-2 py-1 rounded text-xs hover:bg-red-700"
-              >
-                Cancelar
-              </button>
+              <div className="w-full flex justify-end gap-0.5">
+                <button
+                  type="button"
+                  onClick={() => confirmDeleteItem(itemIndex)}
+                  className="bg-white text-red-500 px-2 py-1 rounded text-xs font-semibold hover:bg-red-50 flex items-center gap-1"
+                >
+                  <FiTrash size={10} /> Deletar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => cancelDeleteItem(itemIndex)}
+                  className="bg-red-600 text-white px-2 py-1 rounded text-xs hover:bg-red-700"
+                >
+                  Cancelar
+                </button>
+              </div>
             </div>
           );
         })}
@@ -350,9 +351,6 @@ export default () => {
         <table className="w-full table list-table">
           <thead>
             <tr className="text-gray-600 bg-gray-300 text-sm">
-              <th className="p-1 w-[5%]">
-                <FiMenu size={14} className="text-gray-500 mx-auto" />
-              </th>
               <th className="p-1 w-[5%]">
                 <button
                   type="button"
@@ -372,6 +370,9 @@ export default () => {
               <th>QTD.</th>
               <th>PRODUTO</th>
               <th>PREÇO</th>
+              <th className="p-1 w-[5%]">
+                <FiMenu size={14} className="text-gray-500 mx-auto" />
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -391,7 +392,7 @@ export default () => {
                     touchAction: 'pan-y'
                   }}
                   onTouchStart={(e) => {
-                    // Só prevenir se o toque for na primeira coluna (handle)
+                    // Só prevenir se o toque for na última coluna (handle)
                     const target = e.target as HTMLElement;
                     const isHandle = target.closest('[data-drag-handle]');
                     if (isHandle) {
@@ -400,69 +401,6 @@ export default () => {
                     }
                   }}
                 >
-                  <td className="w-[5%] border text-center">
-                    <div
-                      data-drag-handle
-                      className="cursor-grab active:cursor-grabbing hover:bg-gray-200 rounded inline-block transition-colors select-none"
-                      style={{ 
-                        touchAction: 'none',
-                        WebkitTouchCallout: 'none',
-                        WebkitUserSelect: 'none',
-                        userSelect: 'none'
-                      }}
-                      title="Arrastar para deletar"
-                      onMouseDown={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const startX = e.clientX;
-                        handleSwipeStart(originalIndex, startX);
-                        
-                        const handleMouseMove = (e: MouseEvent) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleSwipeMove(originalIndex, e.clientX, startX);
-                        };
-
-                        const handleMouseUp = (e: MouseEvent) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleSwipeEnd(originalIndex);
-                          document.removeEventListener('mousemove', handleMouseMove);
-                          document.removeEventListener('mouseup', handleMouseUp);
-                        };
-
-                        document.addEventListener('mousemove', handleMouseMove, { passive: false });
-                        document.addEventListener('mouseup', handleMouseUp, { passive: false });
-                      }}
-                      onTouchStart={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const startX = e.touches[0].clientX;
-                        handleSwipeStart(originalIndex, startX);
-                        // Salvar startX no elemento para usar no touchMove
-                        (e.currentTarget as any).swipeStartX = startX;
-                      }}
-                      onTouchMove={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        const touch = e.touches[0];
-                        const startX = (e.currentTarget as any).swipeStartX || touch.clientX;
-                        handleSwipeMove(originalIndex, touch.clientX, startX);
-                      }}
-                      onTouchEnd={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleSwipeEnd(originalIndex);
-                      }}
-                      onTouchCancel={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handleSwipeEnd(originalIndex);
-                      }}
-                    >
-                      <FiMenu size={14} className="text-gray-400" />
-                    </div>
-                  </td>
                     <td className="p-1 w-[5%] border">
                       <CheckInput
                         label=""
@@ -501,6 +439,69 @@ export default () => {
                         onInput={(event) => handleNumberChange(event, "unitary_value", originalIndex)}
                         inputMode="decimal"
                       />
+                    </td>
+                    <td className="w-[5%] border text-center">
+                      <div
+                        data-drag-handle
+                        className="cursor-grab active:cursor-grabbing hover:bg-gray-200 rounded inline-block transition-colors select-none"
+                        style={{ 
+                          touchAction: 'none',
+                          WebkitTouchCallout: 'none',
+                          WebkitUserSelect: 'none',
+                          userSelect: 'none'
+                        }}
+                        title="Arrastar para deletar"
+                        onMouseDown={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          const startX = e.clientX;
+                          handleSwipeStart(originalIndex, startX);
+                          
+                          const handleMouseMove = (e: MouseEvent) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleSwipeMove(originalIndex, e.clientX, startX);
+                          };
+
+                          const handleMouseUp = (e: MouseEvent) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            handleSwipeEnd(originalIndex);
+                            document.removeEventListener('mousemove', handleMouseMove);
+                            document.removeEventListener('mouseup', handleMouseUp);
+                          };
+
+                          document.addEventListener('mousemove', handleMouseMove, { passive: false });
+                          document.addEventListener('mouseup', handleMouseUp, { passive: false });
+                        }}
+                        onTouchStart={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          const startX = e.touches[0].clientX;
+                          handleSwipeStart(originalIndex, startX);
+                          // Salvar startX no elemento para usar no touchMove
+                          (e.currentTarget as any).swipeStartX = startX;
+                        }}
+                        onTouchMove={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          const touch = e.touches[0];
+                          const startX = (e.currentTarget as any).swipeStartX || touch.clientX;
+                          handleSwipeMove(originalIndex, touch.clientX, startX);
+                        }}
+                        onTouchEnd={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleSwipeEnd(originalIndex);
+                        }}
+                        onTouchCancel={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleSwipeEnd(originalIndex);
+                        }}
+                      >
+                        <FiMenu size={14} className="text-gray-400" />
+                      </div>
                     </td>
                 </tr>
               );
