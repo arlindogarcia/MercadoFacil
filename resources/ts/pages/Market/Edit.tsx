@@ -77,6 +77,29 @@ export default () => {
 
   const [confirmationDeleteList, setConfirmationDeleteList] = useState(false);
   const [swipeStates, setSwipeStates] = useState<{[key: number]: {offset: number, showDelete: boolean, isDragging: boolean}}>({});
+  const [isDraggingAny, setIsDraggingAny] = useState(false);
+
+  // Prevenir navegação do navegador durante o arrastar
+  useEffect(() => {
+    const preventNavigation = (e: TouchEvent) => {
+      if (isDraggingAny) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    };
+
+    if (isDraggingAny) {
+      document.addEventListener('touchstart', preventNavigation, { passive: false });
+      document.addEventListener('touchmove', preventNavigation, { passive: false });
+      document.addEventListener('touchend', preventNavigation, { passive: false });
+    }
+
+    return () => {
+      document.removeEventListener('touchstart', preventNavigation);
+      document.removeEventListener('touchmove', preventNavigation);
+      document.removeEventListener('touchend', preventNavigation);
+    };
+  }, [isDraggingAny]);
 
   const deleteItemForm = useForm({});
   const [deleting, setDeleting] = useState(false);
@@ -192,6 +215,7 @@ export default () => {
 
   const handleSwipeStart = (index: number, clientX: number) => {
     updateSwipeState(index, { isDragging: true });
+    setIsDraggingAny(true);
   };
 
   const handleSwipeMove = (index: number, clientX: number, startX: number) => {
@@ -213,6 +237,7 @@ export default () => {
     if (!currentState) return;
     
     updateSwipeState(index, { isDragging: false });
+    setIsDraggingAny(false);
     
     if (currentState.offset < 60) {
       updateSwipeState(index, { offset: 0, showDelete: false });
@@ -362,36 +387,56 @@ export default () => {
                   className={`py-0 border ${visibleIndex % 2 == 0 ? "bg-white" : "bg-gray-100"} relative overflow-hidden`}
                   style={{ 
                     transform: `translateX(${swipeState.offset}px)`,
-                    transition: swipeState.isDragging ? 'none' : 'transform 0.3s ease'
+                    transition: swipeState.isDragging ? 'none' : 'transform 0.3s ease',
+                    touchAction: 'pan-y'
+                  }}
+                  onTouchStart={(e) => {
+                    // Só prevenir se o toque for na primeira coluna (handle)
+                    const target = e.target as HTMLElement;
+                    const isHandle = target.closest('[data-drag-handle]');
+                    if (isHandle) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                    }
                   }}
                 >
                   <td className="w-[5%] border text-center">
                     <div
-                      className="cursor-grab active:cursor-grabbing hover:bg-gray-200 rounded inline-block transition-colors select-none touch-none"
-                      style={{ touchAction: 'none' }}
+                      data-drag-handle
+                      className="cursor-grab active:cursor-grabbing hover:bg-gray-200 rounded inline-block transition-colors select-none"
+                      style={{ 
+                        touchAction: 'none',
+                        WebkitTouchCallout: 'none',
+                        WebkitUserSelect: 'none',
+                        userSelect: 'none'
+                      }}
                       title="Arrastar para deletar"
                       onMouseDown={(e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         const startX = e.clientX;
                         handleSwipeStart(originalIndex, startX);
                         
                         const handleMouseMove = (e: MouseEvent) => {
                           e.preventDefault();
+                          e.stopPropagation();
                           handleSwipeMove(originalIndex, e.clientX, startX);
                         };
 
                         const handleMouseUp = (e: MouseEvent) => {
                           e.preventDefault();
+                          e.stopPropagation();
                           handleSwipeEnd(originalIndex);
                           document.removeEventListener('mousemove', handleMouseMove);
                           document.removeEventListener('mouseup', handleMouseUp);
                         };
 
-                        document.addEventListener('mousemove', handleMouseMove);
-                        document.addEventListener('mouseup', handleMouseUp);
+                        document.addEventListener('mousemove', handleMouseMove, { passive: false });
+                        document.addEventListener('mouseup', handleMouseUp, { passive: false });
                       }}
                       onTouchStart={(e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         const startX = e.touches[0].clientX;
                         handleSwipeStart(originalIndex, startX);
                         // Salvar startX no elemento para usar no touchMove
@@ -399,12 +444,19 @@ export default () => {
                       }}
                       onTouchMove={(e) => {
                         e.preventDefault();
+                        e.stopPropagation();
                         const touch = e.touches[0];
                         const startX = (e.currentTarget as any).swipeStartX || touch.clientX;
                         handleSwipeMove(originalIndex, touch.clientX, startX);
                       }}
                       onTouchEnd={(e) => {
                         e.preventDefault();
+                        e.stopPropagation();
+                        handleSwipeEnd(originalIndex);
+                      }}
+                      onTouchCancel={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
                         handleSwipeEnd(originalIndex);
                       }}
                     >
