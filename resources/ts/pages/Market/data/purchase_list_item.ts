@@ -8,5 +8,6 @@ export const newPurchaseListItem = (): PurchaseListItem => {
     quantity: 1,
     product: "",
     unitary_value: 0,
+    deleted: false,
   };
 };

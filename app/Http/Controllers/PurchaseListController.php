@@ -55,6 +55,15 @@ class PurchaseListController extends Controller
 
             foreach ($request->items as $item) {
                 $listItem = PurchaseListItem::find($item['id']);
+
+                if (@$item['deleted']) {
+                    if ((bool) $listItem) {
+                        $listItem->delete();
+                        continue;
+                    } else {
+                        continue;
+                    }
+                }
                 if (!$listItem) {
                     $listItem = new PurchaseListItem();
                 }

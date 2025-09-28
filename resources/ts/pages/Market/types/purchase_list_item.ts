@@ -6,4 +6,5 @@ export interface PurchaseListItem extends Model {
   quantity: number;
   product: string;
   unitary_value: number;
+  deleted?: boolean;
 }
