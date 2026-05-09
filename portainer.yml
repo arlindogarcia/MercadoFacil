@@ -16,7 +16,7 @@ services:
       APP_ENV: production
       APP_KEY: "VARIAVEL"
       APP_DEBUG: "false"
-      APP_URL: "https://mercadofacil.com.br"
+      APP_URL: "https://mercadofacil.agntech.com.br"
       LOG_CHANNEL: daily
       LOG_LEVEL: error
       DB_CONNECTION: mysql
@@ -58,7 +58,7 @@ services:
         window: 120s
       labels:
         - "traefik.enable=true"
-        - "traefik.http.routers.mercado-facil.rule=Host(`mercadofacil.com.br`)"
+        - "traefik.http.routers.mercado-facil.rule=Host(`mercadofacil.agntech.com.br`)"
         - "traefik.http.routers.mercado-facil.entrypoints=websecure"
         - "traefik.http.routers.mercado-facil.tls=true"
         - "traefik.http.services.mercado-facil.loadbalancer.server.port=80"
@@ -66,7 +66,7 @@ services:
       - traefik
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.mercado-facil.rule=Host(`mercadofacil.com.br`)"
+      - "traefik.http.routers.mercado-facil.rule=Host(`mercadofacil.agntech.com.br`)"
       - "traefik.http.routers.mercado-facil.entrypoints=websecure"
       - "traefik.http.routers.mercado-facil.tls=true"
       - "traefik.http.services.mercado-facil.loadbalancer.server.port=80"

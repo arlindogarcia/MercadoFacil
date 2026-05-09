@@ -7,7 +7,7 @@ FROM node:20-bookworm AS node_assets
 
 WORKDIR /var/www
 
-COPY package.json yarn.lock ./
+COPY package.json package-lock.json ./
 RUN npm install --include=dev --no-audit --no-fund
 
 COPY . .
