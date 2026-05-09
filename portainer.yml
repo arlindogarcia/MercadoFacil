@@ -59,18 +59,18 @@ services:
       labels:
         - "com.centurylinklabs.watchtower.enable=true"
         - "traefik.enable=true"
-        - "traefik.http.routers.agntech-api.rule=Host(`mercadofacil.agntech.com.br`)"
-        - "traefik.http.routers.agntech-api.entrypoints=web"
-        - "traefik.http.services.agntech-api.loadbalancer.server.port=80"
+        - "traefik.http.routers.mercadofacil.rule=Host(`mercadofacil.agntech.com.br`)"
+        - "traefik.http.routers.mercadofacil.entrypoints=web"
+        - "traefik.http.services.mercadofacil.loadbalancer.server.port=80"
     networks:
       - traefik
       - l2ov-att
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
       - "traefik.enable=true"
-      - "traefik.http.routers.agntech-api.rule=Host(`mercadofacil.agntech.com.br`)"
-      - "traefik.http.routers.agntech-api.entrypoints=web"
-      - "traefik.http.services.agntech-api.loadbalancer.server.port=80"
+      - "traefik.http.routers.mercadofacil.rule=Host(`mercadofacil.agntech.com.br`)"
+      - "traefik.http.routers.mercadofacil.entrypoints=web"
+      - "traefik.http.services.mercadofacil.loadbalancer.server.port=80"
 
 volumes:
   storage:
