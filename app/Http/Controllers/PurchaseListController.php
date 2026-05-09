@@ -101,17 +101,21 @@ class PurchaseListController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         try {
             $list = PurchaseList::findOrFail($id);
 
             if ($list->user_id != auth()->user()->id) {
+                if ($request->wantsJson()) {
+                    return response()->json(['error' => 'Sem permissão.'], 403);
+                }
                 return back()->with('flash', [
                     'banner' => "Sem permissão.",
                     'bannerStyle' => 'danger',
                 ]);
             }
+
             foreach ($list->items as $item) {
                 $item->delete();
             }
@@ -127,6 +131,9 @@ class PurchaseListController extends Controller
             ]);
 
         } catch (Exception $e) {
+            if ($request->wantsJson()) {
+                return response()->json(['error' => $e->getMessage()], 500);
+            }
             return back()->with('flash', [
                 'banner' => "Erro: " . $e->getMessage(),
                 'bannerStyle' => 'danger',

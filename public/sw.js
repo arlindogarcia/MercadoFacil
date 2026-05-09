@@ -1,5 +1,5 @@
-const CACHE = 'mercado-facil-v1';
-const ASSETS_CACHE = 'mercado-facil-assets-v1';
+const CACHE = 'mercado-facil-v2';
+const ASSETS_CACHE = 'mercado-facil-assets-v2';
 
 self.addEventListener('install', () => self.skipWaiting());
 

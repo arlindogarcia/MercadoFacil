@@ -34,6 +34,7 @@ Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/purchase-lists', [PurchaseListController::class, 'index']);
     Route::get('/purchase-lists/{id}', [PurchaseListController::class, 'edit']);
+    Route::delete('/purchase-lists/{id}', [PurchaseListController::class, 'destroy']);
 
     Route::prefix('/api')->group(function () {
         Route::get('/purchase-lists', [PurchaseListController::class, 'get']);
