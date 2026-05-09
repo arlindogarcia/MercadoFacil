@@ -21,6 +21,11 @@ Route::get('/', function () {
     return redirect('/home');
 });
 
+Route::get('/health', function () {
+    return response()->json(['status' => 'ok']);
+});
+
+
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/home', [HomeController::class, 'index'])->name('home');

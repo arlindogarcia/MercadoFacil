@@ -1,0 +1,16 @@
+.git
+.gitignore
+node_modules
+vendor
+.env
+.env.*
+!.env.example
+storage/logs/*
+!storage/logs/.gitkeep
+bootstrap/cache/*
+!bootstrap/cache/.gitkeep
+npm-debug.log
+*.md
+.phpunit.result.cache
+.idea
+.vscode

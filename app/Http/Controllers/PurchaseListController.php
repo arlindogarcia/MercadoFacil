@@ -77,6 +77,10 @@ class PurchaseListController extends Controller
 
             DB::commit();
 
+            if ($request->wantsJson()) {
+                return response()->json(['list' => $list->load('items')]);
+            }
+
             if (! $request->id) {
                 return redirect('/purchase-lists/' . $list->id)->with('flash', [
                     'banner' => "Lista salva com sucesso.",
@@ -111,8 +115,12 @@ class PurchaseListController extends Controller
             foreach ($list->items as $item) {
                 $item->delete();
             }
-            
+
             PurchaseList::where('id', $id)->delete();
+
+            if ($request->wantsJson()) {
+                return response()->json(['success' => true]);
+            }
 
             return redirect('/purchase-lists')->with('flash', [
                 'banner' => "Lista deletada com sucesso.",

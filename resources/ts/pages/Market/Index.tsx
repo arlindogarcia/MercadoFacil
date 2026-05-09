@@ -8,30 +8,50 @@ import { ApiPaginationRes } from "../System/types/pagination";
 import { FiEdit, FiPlus } from "react-icons/fi";
 import { Link } from "@inertiajs/react";
 import helper from "@/utils/helper";
+import { db } from "@/db";
 
 export default () => {
   const [purchaseLists, setPurchaseLists] = useState<PurchaseList[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
+  const [isOffline, setIsOffline] = useState(false);
 
-  const addPurchaseLists = (purchaseLists: PurchaseList[]) => {
-    setPurchaseLists((oldValue) => {
-      return [...oldValue, ...purchaseLists];
+  const addPurchaseLists = (lists: PurchaseList[]) => {
+    setPurchaseLists((old) => [...old, ...lists]);
+  };
+
+  const loadFromIndexedDB = async () => {
+    const cached = await db.purchaseLists.toArray();
+    cached.sort((a, b) => {
+      const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+      const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+      return dateB - dateA;
     });
+    setPurchaseLists(cached);
+    setIsOffline(true);
   };
 
   const getPurchaseLists = async (page: number) => {
     setIsLoading(true);
-    const resp: AxiosResponse<ApiPaginationRes<PurchaseList[]>> = await axios.get(
-      `/api/purchase-lists?page=${page}`
-    );
-    setIsLoading(false);
-
-    addPurchaseLists(resp.data.data);
-    setCurrentPage(page);
-    setLastPage(resp.data.last_page);
-    console.log("getPurchaseLists", resp.data);
+    try {
+      const resp: AxiosResponse<ApiPaginationRes<PurchaseList[]>> = await axios.get(
+        `/api/purchase-lists?page=${page}`
+      );
+      setIsOffline(false);
+      if (page === 1) {
+        await db.purchaseLists.bulkPut(resp.data.data);
+      }
+      addPurchaseLists(resp.data.data);
+      setCurrentPage(page);
+      setLastPage(resp.data.last_page);
+    } catch {
+      if (page === 1) {
+        await loadFromIndexedDB();
+      }
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -51,6 +71,11 @@ export default () => {
         </React.Fragment>
       }
     >
+      {isOffline && (
+        <div className="w-full max-w-[500px] mx-auto mb-3 text-center text-xs text-gray-500 bg-yellow-50 border border-yellow-200 rounded py-1 px-2">
+          Exibindo dados salvos localmente
+        </div>
+      )}
       <div className="w-full flex flex-wrap max-w-[500px] mx-auto">
         {purchaseLists.map((purchaseList) => (
           <Link
@@ -64,8 +89,14 @@ export default () => {
                 MERCADO {(purchaseList.marketplace ?? "").toUpperCase()}
               </span>
               <span className="font-semibold text-gray-500 ml-1">
-                ({purchaseList.items.length} {purchaseList.items.length === 1 ? "item" : "itens"})
+                ({purchaseList.items?.length ?? 0}{" "}
+                {purchaseList.items?.length === 1 ? "item" : "itens"})
               </span>
+              {String(purchaseList.id).startsWith("offline_") && (
+                <span className="ml-2 text-xs text-orange-500 font-normal">
+                  (não sincronizado)
+                </span>
+              )}
               <span className="absolute top-0 right-0">
                 <FiEdit />
               </span>
@@ -110,7 +141,7 @@ export default () => {
         )}
       </div>
 
-      {currentPage != lastPage && !isLoading && (
+      {currentPage != lastPage && !isLoading && !isOffline && (
         <DefaultButton
           size="sm"
           color="gray"

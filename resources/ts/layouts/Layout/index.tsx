@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Sidebar from "./components/Sidebar";
 import Header from "./components/Header";
 import { Banner } from "@/components/Banner";
+import { OfflineIndicator } from "@/components/OfflineIndicator";
 
 interface Props {
   children: React.ReactNode;
@@ -15,6 +16,7 @@ function Layout({ children, header, headerClass, hasPadding = true }: Props) {
 
   return (
     <div className="flex min-h-screen overflow-hidden">
+      <OfflineIndicator />
       <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
       <div className="relative flex flex-col flex-1 overflow-x-hidden overflow-y-auto bg-gray-50">

@@ -35,6 +35,7 @@
     "@vitejs/plugin-react": "^3.1.0",
     "autoprefixer": "^10.4.19",
     "axios": "^1.1.2",
+    "dexie": "^3.2.7",
     "laravel-vite-plugin": "^0.7.4",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
