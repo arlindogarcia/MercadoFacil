@@ -64,6 +64,7 @@ services:
         - "traefik.http.services.mercado-facil.loadbalancer.server.port=80"
     networks:
       - traefik
+      - l2ov-att
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.mercado-facil.rule=Host(`mercadofacil.agntech.com.br`)"
@@ -76,4 +77,6 @@ volumes:
 
 networks:
   traefik:
+    external: true
+  l2ov-att:
     external: true
