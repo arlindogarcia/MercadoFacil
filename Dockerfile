@@ -64,11 +64,10 @@ COPY . .
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --prefer-dist
 
 COPY --from=node_assets /var/www/public/build ./public/build
-COPY --from=node_assets /var/www/public/build-front ./public/build-front
 
-RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/public/build /var/www/public/build-front \
+RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache /var/www/public/build \
     && chmod -R 775 /var/www/storage /var/www/bootstrap/cache \
-    && chmod -R 755 /var/www/public/build /var/www/public/build-front
+    && chmod -R 755 /var/www/public/build
 
 RUN mkdir -p storage/app/public \
     && ln -sfn ../storage/app/public public/storage \
