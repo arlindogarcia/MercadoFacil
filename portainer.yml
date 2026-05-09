@@ -57,20 +57,20 @@ services:
         max_attempts: 5
         window: 120s
       labels:
+        - "com.centurylinklabs.watchtower.enable=true"
         - "traefik.enable=true"
-        - "traefik.http.routers.mercado-facil.rule=Host(`mercadofacil.agntech.com.br`)"
-        - "traefik.http.routers.mercado-facil.entrypoints=websecure"
-        - "traefik.http.routers.mercado-facil.tls=true"
-        - "traefik.http.services.mercado-facil.loadbalancer.server.port=80"
+        - "traefik.http.routers.agntech-api.rule=Host(`mercadofacil.agntech.com.br`)"
+        - "traefik.http.routers.agntech-api.entrypoints=web"
+        - "traefik.http.services.agntech-api.loadbalancer.server.port=80"
     networks:
       - traefik
       - l2ov-att
     labels:
+      - "com.centurylinklabs.watchtower.enable=true"
       - "traefik.enable=true"
-      - "traefik.http.routers.mercado-facil.rule=Host(`mercadofacil.agntech.com.br`)"
-      - "traefik.http.routers.mercado-facil.entrypoints=websecure"
-      - "traefik.http.routers.mercado-facil.tls=true"
-      - "traefik.http.services.mercado-facil.loadbalancer.server.port=80"
+      - "traefik.http.routers.agntech-api.rule=Host(`mercadofacil.agntech.com.br`)"
+      - "traefik.http.routers.agntech-api.entrypoints=web"
+      - "traefik.http.services.agntech-api.loadbalancer.server.port=80"
 
 volumes:
   storage:
