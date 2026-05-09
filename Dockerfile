@@ -7,8 +7,8 @@ FROM node:20-bookworm AS node_assets
 
 WORKDIR /var/www
 
-COPY package.json package-lock.json ./
-RUN npm install --include=dev --no-audit --no-fund
+COPY package.json package-lock.json* ./
+RUN npm ci --include=dev --no-audit --no-fund 2>/dev/null || npm install --include=dev --no-audit --no-fund
 
 COPY . .
 RUN npm run build-deploy
@@ -18,6 +18,7 @@ FROM php:8.2-fpm-bookworm AS production
 RUN apt-get update && apt-get install -y --no-install-recommends \
     nginx \
     default-mysql-client \
+    gzip \
     libzip-dev \
     libpng-dev \
     libonig-dev \

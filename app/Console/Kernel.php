@@ -24,7 +24,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        $schedule->command('backup:run --only-db')->dailyAt('03:00')->withoutOverlapping();
+        $schedule->command('backup:clean')->dailyAt('05:00')->withoutOverlapping();
     }
 
     /**
